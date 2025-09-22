@@ -1,0 +1,618 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+  height: 100vh;
+  background: #000; /* Initially Black Background */
+  position: relative;
+  opacity: 1;
+  animation: showBackground 1s linear 5s forwards; /* Background Fades In */
+}
+
+/* Show background image after loading */
+@keyframes showBackground {
+  100% {
+    background: url("WhatsApp\ Image\ 2025-03-19\ at\ 15.56.32_11c6cf19.jpg")
+      no-repeat center calc(50% - 100px) / cover;
+  }
+}
+
+/* Blur effect for dreamy aesthetics */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  filter: blur(2px);
+  z-index: -1;
+}
+
+/* Loader Container */
+.loader {
+  display: flex;
+  justify-content: space-between;
+  width: 100px;
+  position: absolute;
+}
+
+/* Ball Styling */
+.loader div {
+  width: 20px;
+  height: 20px;
+  background-color: #ff69b4;
+  border-radius: 50%;
+  animation: jump 1.5s ease-in-out infinite;
+}
+
+/* Animating Each Ball at Different Delays */
+.loader div:nth-child(1) {
+  animation-delay: 0s;
+}
+.loader div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loader div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes jump {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 5px 10px rgba(255, 105, 180, 0.5);
+  }
+  50% {
+    transform: translateY(-40px);
+    box-shadow: 0 80px 30px rgba(255, 5, 130, 0.726);
+  }
+}
+
+/* Fade Out After 5 Seconds */
+@keyframes fadeOut {
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Loader disappears after 5s */
+.loader {
+  animation: fadeOut 1s linear 4s forwards;
+}
+
+/* Hide container initially & Show after 5s */
+.container {
+  position: relative;
+  text-align: center;
+  width: 350px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-out;
+  opacity: 0; /* Initially hidden */
+  animation: showContent 1s linear 5s forwards; /* Show after 5s */
+}
+
+#dropdown-toggle:checked ~ .dropdown-list {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+/* Move container up when clicked */
+#dropdown-toggle:checked ~ .container {
+  transform: translateY(-100px); /* Adjust distance as needed */
+}
+
+/* Return container to original position when unchecked */
+#dropdown-toggle:not(:checked) ~ .container {
+  transform: translateY(0);
+}
+
+/* Base container styles with smooth transition */
+.container {
+  transition: transform 0.3s ease;
+  transform: translateY(0);
+  position: relative; /* Ensure transform works as expected */
+}
+
+/* Class to move the container up by 100px (adjust the value as needed) */
+.container.moved-up {
+  transform: translateY(-100px);
+}
+
+/* Hide the checkbox; it's just used as a toggle */
+#dropdown-toggle {
+  display: none;
+}
+
+/* Style the dropdown button */
+.dropdown-button {
+  display: inline-block;
+  background: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style the dropdown list - initially hidden */
+.dropdown-list {
+  display: none;
+  margin-top: 10px;
+}
+
+/* When the checkbox is checked, show the dropdown list */
+#dropdown-toggle:checked + .dropdown-button + .dropdown-list {
+  display: block;
+}
+
+/* Custom Wishlist Item Container */
+.custom-item-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Wishlist Input Field */
+#custom-item-input {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ff69b4;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.6);
+  color: #333;
+  font-weight: bold;
+}
+
+#custom-item-input::placeholder {
+  color: #888;
+  font-weight: normal;
+}
+
+/* Add Item Button */
+#add-custom-item {
+  padding: 10px 15px;
+  background: linear-gradient(45deg, #ff69b4, #ff3d9f);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 3px 8px rgba(255, 105, 180, 0.3);
+}
+
+#add-custom-item:hover {
+  background: linear-gradient(45deg, #ff3d9f, #ff1493);
+  transform: scale(1.05);
+}
+
+#add-custom-item:active {
+  transform: scale(0.95);
+}
+
+/* Show content after loader fades */
+@keyframes showContent {
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Dropdown Button */
+.dropdown-button {
+  display: block;
+  padding: 15px;
+  background: linear-gradient(45deg, #ff8ebf, #ff6bcb);
+  color: white;
+  font-size: 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 3px 8px rgba(255, 105, 180, 0.3);
+}
+
+.dropdown-button:hover {
+  background: linear-gradient(45deg, #ff6bcb, #ff3d9f);
+  transform: scale(1.05);
+}
+
+#dropdown-toggle {
+  display: none;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  list-style-type: none;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px) scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+  z-index: 1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-list label {
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.dropdown-list li:hover {
+  background: #ffd6e0;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+  accent-color: #ff6bcb;
+}
+
+/* Styling the Form */
+#wishlist-form {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Make the form scrollable if content exceeds height */
+#wishlist-form {
+  max-height: 400px; /* Adjust height as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+  padding-right: 5px; /* Prevents text from being hidden behind scrollbar */
+}
+
+/* Style scrollbar for a sleek look */
+#wishlist-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+#wishlist-form::-webkit-scrollbar-thumb {
+  background-color: #ff69b4;
+  border-radius: 10px;
+}
+
+#wishlist-form::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+/* Input Field Styling */
+#name-input {
+  width: 250px;
+  padding: 10px;
+  border: 2px solid #ff69b4;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  margin: 20px auto;
+}
+
+/* Submit Button Styling */
+.submit-button {
+  background-color: #ff69b4;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 20px;
+}
+
+/* Hover Effect */
+.submit-button:hover {
+  background-color: #ff1493;
+  transform: scale(1.05);
+}
+
+/* Button Click Animation */
+.submit-button:active {
+  transform: scale(0.95);
+}
+
+/* Blurred Background when Popup is Active */
+body.modal-active {
+  filter: none;
+  pointer-events: none;
+}
+
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95); /* Slight transparency */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: none;
+  z-index: 9999;
+  backdrop-filter: none; /* Ensure no blur */
+  filter: none !important; /* Force clarity */
+}
+
+.modal-content {
+  font-size: 20px;
+  color: #ff1493;
+  font-weight: bold;
+  position: relative;
+  z-index: 10000;
+  filter: none !important; /* Force clarity */
+  backdrop-filter: none !important; /* Prevent blur */
+}
+
+/* Tablets */
+@media (max-width: 932px) {
+  /* Loader Container */
+  .loader {
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+    position: absolute;
+  }
+
+  /* Ball Styling */
+  .loader div {
+    width: 20px;
+    height: 20px;
+    background-color: #ff69b4;
+    border-radius: 50%;
+    animation: jump 1.5s ease-in-out infinite;
+  }
+
+  /* Animating Each Ball at Different Delays */
+  .loader div:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .loader div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .loader div:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes jump {
+    0%,
+    100% {
+      transform: translateY(0);
+      box-shadow: 0 5px 10px rgba(255, 105, 180, 0.5);
+    }
+    50% {
+      transform: translateY(-50px);
+      box-shadow: 0 80px 30px rgba(255, 5, 130, 0.726);
+    }
+  }
+
+  /* Fade Out After 5 Seconds */
+  @keyframes fadeOut {
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  /* Loader disappears after 5s */
+  .loader {
+    animation: fadeOut 1s linear 4s forwards;
+  }
+
+  /* Show background image after loading */
+  @keyframes showBackground {
+    100% {
+      background: url("WhatsApp\ Image\ 2025-03-19\ at\ 15.56.32_11c6cf19.jpg")
+        no-repeat center calc(100% - 0px) / cover;
+      background-size: 200%;
+    }
+  }
+  .container {
+    width: 70%;
+  }
+
+  .dropdown-list label {
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .dropdown-list li:hover {
+    background: #ffd6e0;
+  }
+
+  input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: #ff6bcb;
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Dropdown Button */
+  .dropdown-button {
+    display: block;
+    padding: 15px;
+    background: linear-gradient(45deg, #ff8ebf, #ff6bcb);
+    color: white;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 3px 8px rgba(255, 105, 180, 0.3);
+  }
+
+  .dropdown-button:hover {
+    background: linear-gradient(45deg, #ff6bcb, #ff3d9f);
+    transform: scale(1.05);
+  }
+
+  * Styling the Form */ #wishlist-form {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  /* Make the form scrollable if content exceeds height */
+  #wishlist-form {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+    padding-right: 5px; /* Prevents text from being hidden behind scrollbar */
+  }
+
+  /* Style scrollbar for a sleek look */
+  #wishlist-form::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #wishlist-form::-webkit-scrollbar-thumb {
+    background-color: #ff69b4;
+    border-radius: 10px;
+  }
+
+  #wishlist-form::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+  }
+
+  /* Custom Wishlist Item Container */
+  .custom-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Custom Wishlist Input Field */
+  #custom-item-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ff69b4;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.6);
+    color: #333;
+    font-weight: bold;
+  }
+
+  #custom-item-input::placeholder {
+    color: #888;
+    font-weight: normal;
+    font-size: 10px;
+  }
+
+  /* Add Item Button */
+  #add-custom-item {
+    padding: 10px 15px;
+    background: linear-gradient(45deg, #ff69b4, #ff3d9f);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 3px 8px rgba(255, 105, 180, 0.3);
+  }
+
+  #add-custom-item:hover {
+    background: linear-gradient(45deg, #ff3d9f, #ff1493);
+    transform: scale(1.05);
+  }
+
+  #add-custom-item:active {
+    transform: scale(0.95);
+  }
+
+  /* Input Field Styling */
+  #name-input {
+    width: 250px;
+    padding: 10px;
+    border: 2px solid #ff69b4;
+    border-radius: 5px;
+    font-size: 12px;
+    outline: none;
+    margin: 20px auto;
+  }
+
+  #name-input::placeholder {
+    font-size: 10px;
+  }
+
+  /* Submit Button Styling */
+  .submit-button {
+    background-color: #ff69b4;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 20px;
+  }
+
+  /* Hover Effect */
+  .submit-button:hover {
+    background-color: #ff1493;
+    transform: scale(1.05);
+  }
+
+  /* Button Click Animation */
+  .submit-button:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Mobile Devices */

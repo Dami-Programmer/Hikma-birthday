@@ -1,0 +1,188 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #000; /* Initially Black Background */
+  position: relative;
+  opacity: 1;
+  animation: showBackground 1s linear 5s forwards; /* Background Fades In */
+  flex-direction: column;
+  text-align: center;
+}
+
+/* Show background image after loading */
+@keyframes showBackground {
+  100% {
+    background: url("WhatsApp\ Image\ 2025-03-19\ at\ 15.56.32_11c6cf19.jpg")
+      no-repeat center center / cover;
+  }
+}
+
+/* Remove background blur */
+body.modal-active {
+  filter: none;
+  pointer-events: auto;
+}
+
+/* Container for form */
+.container {
+  position: relative;
+  text-align: center;
+  width: 90%; /* Adjust width for responsiveness */
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-out;
+  opacity: 0;
+  animation: showContent 1s linear 5s forwards;
+}
+
+/* Show content after loader fades */
+@keyframes showContent {
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Dropdown Button */
+.dropdown-button {
+  display: block;
+  padding: 15px;
+  background: linear-gradient(45deg, #ff8ebf, #ff6bcb);
+  color: white;
+  font-size: 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 3px 8px rgba(255, 105, 180, 0.3);
+}
+
+.dropdown-button:hover {
+  background: linear-gradient(45deg, #ff6bcb, #ff3d9f);
+  transform: scale(1.05);
+}
+
+/* Form Styling */
+#wishlist-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#name-input {
+  width: 100%;
+  max-width: 250px;
+  padding: 10px;
+  border: 2px solid #ff69b4;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  margin: 20px auto;
+}
+
+/* Submit Button */
+.submit-button {
+  background-color: #ff69b4;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 20px;
+}
+
+/* Modal Popup */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: none;
+  z-index: 9999;
+  width: 90%;
+  max-width: 350px;
+}
+
+.modal-content {
+  font-size: 20px;
+  color: #ff1493;
+  font-weight: bold;
+  position: relative;
+  z-index: 10000;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ----------------- RESPONSIVE DESIGN ----------------- */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  body {
+    flex-direction: column;
+    padding: 20px;
+  }
+  .container {
+    width: 80%;
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+
+  .modal {
+    width: 90%;
+  }
+
+  .submit-button {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+}
+
+/* Small Mobile (iPhones, etc.) */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  .modal {
+    width: 95%;
+  }
+
+  .dropdown-button {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  #name-input {
+    font-size: 14px;
+  }
+}

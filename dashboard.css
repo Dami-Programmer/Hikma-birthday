@@ -1,0 +1,77 @@
+/* General Page Styles */
+body {
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(to right, #ff69b4, #ff1493);
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  max-width: 600px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Wishlist Grid */
+.wishlist-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Wishlist Cards */
+.wishlist-card {
+  background: white;
+  color: black;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.wishlist-card:hover {
+  transform: scale(1.05);
+}
+
+/* Date */
+.date {
+  font-size: 12px;
+  color: gray;
+}
+
+/* Buttons */
+.clear-button,
+.back-button,
+.delete-button {
+  background: #ff1493;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.delete-button {
+  background: #ff4444;
+}
+
+.clear-button:hover,
+.delete-button:hover,
+.back-button:hover {
+  opacity: 0.8;
+}
+
+/* Empty State */
+.empty {
+  font-style: italic;
+  color: white;
+}

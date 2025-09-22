@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bedding Wishlist</title>
+    <link rel="stylesheet" href="hikma.css" />
+  </head>
+  <body>
+    <div class="loader">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="container" id="moveButton">
+      <!-- Hidden Checkbox for Click Toggle -->
+      <input type="checkbox" id="dropdown-toggle" />
+      <label for="dropdown-toggle" class="dropdown-button"
+        >Click to See HIKMA Wishlist</label
+      >
+
+      <form class="dropdown-list" id="wishlist-form">
+        <label> <input type="checkbox" /> Revive my business to life </label>
+
+        <label> <input type="checkbox" /> Money </label>
+
+        <label> <input type="checkbox" />My car paint restoration🙂‍ </label>
+
+        <label> <input type="checkbox" /> A trip to Doha </label>
+
+        <label> <input type="checkbox" /> Or A new car </label>
+
+        <label>
+          <input type="checkbox" /> An iPad A17 pro or 11th Gen(A16)
+        </label>
+
+        <label> <input type="checkbox" /> Money </label>
+
+        <label> <input type="checkbox" />A landed property </label>
+
+        <label> <input type="checkbox" /> Coach bag </label>
+
+        <label> <input type="checkbox" /> Van cleef </label>
+
+        <label> <input type="checkbox" /> A gold jewelry set </label>
+
+        <label>
+          <input type="checkbox" /> Shoert table size tripod Canon camera EOS
+        </label>
+
+        <label>
+          <input type="checkbox" />Pet a ragdoll cat or British shorthair
+        </label>
+
+        <label> <input type="checkbox" /> Samsung 34inch curved monitor </label>
+
+        <!-- Custom Wishlist Item Input -->
+        <div class="custom-item-container">
+          <input
+            type="text"
+            id="custom-item-input"
+            placeholder="Enter custom item"
+          />
+          <button type="button" id="add-custom-item">Add Item</button>
+        </div>
+
+        <input
+          type="text"
+          id="name-input"
+          placeholder="Enter your name"
+          required
+        />
+        <button type="submit" class="submit-button">Submit Wishlist</button>
+      </form>
+    </div>
+
+    <div id="thank-you-modal" class="modal">
+      <div class="modal-content">
+        <h2>Thank you for adding to my wishlist! 💖</h2>
+      </div>
+    </div>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyDCsv_3s00RF4Qc06UiE1WG06wclAEx9F0",
+        authDomain: "birthday-wishlist-46c3c.firebaseapp.com",
+        projectId: "birthday-wishlist-46c3c",
+        storageBucket: "birthday-wishlist-46c3c.firebasestorage.app",
+        messagingSenderId: "595455119080",
+        appId: "1:595455119080:web:cbdf80209ba194ae4a435d",
+        measurementId: "G-HBCSBYS0ZL",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+
+      async function addWishlistItem(name, items) {
+        try {
+          const docRef = await addDoc(collection(db, "wishlist"), {
+            name: name,
+            items: items,
+            createdAt: serverTimestamp(),
+          });
+          console.log("Wishlist item added with ID:", docRef.id);
+        } catch (error) {
+          console.error("Error adding document:", error);
+        }
+      }
+      const moveUpButton = document.getElementById("moveButton");
+      const customItemInput = document.getElementById("custom-item-input");
+      const addCustomItemButton = document.getElementById("add-custom-item");
+      const wishlistForm = document.getElementById("wishlist-form");
+
+      wishlistForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        let name = document.getElementById("name-input").value;
+        let selectedItems = [];
+        document
+          .querySelectorAll(".dropdown-list input:checked")
+          .forEach((item) => {
+            selectedItems.push(item.parentElement.textContent.trim());
+          });
+
+        if (name && selectedItems.length > 0) {
+          let wishlistEntry = {
+            name,
+            selectedItems,
+            date: new Date().toLocaleString(),
+          };
+          await addWishlistItem(name, selectedItems);
+
+          // Store in localStorage (or send to backend)
+          let storedData = JSON.parse(localStorage.getItem("wishlist")) || [];
+          storedData.push(wishlistEntry);
+          localStorage.setItem("wishlist", JSON.stringify(storedData));
+
+          // Show Thank You Popup
+          document.getElementById("thank-you-modal").style.display = "block";
+          document.body.classList.add("modal-active");
+
+          // Hide after 3 seconds & Redirect
+          setTimeout(() => {
+            document.getElementById("thank-you-modal").style.display = "none";
+            document.body.classList.remove("modal-active");
+            document.getElementById("wishlist-form").reset();
+            document.getElementById("dropdown-toggle").checked = false;
+            // window.location.href = "dashboard.html";
+          }, 10000);
+
+          wishlistForm.reset();
+
+          document.getElementById("dropdown-toggle").checked = false;
+        }
+
+        // Remove all elements with the class "custom-item"
+        document.querySelectorAll(".custom-item").forEach((item) => {
+          item.remove();
+        });
+      });
+
+      // Add a custom item when "Add Item" is clicked.
+      addCustomItemButton.addEventListener("click", () => {
+        const customItemText = customItemInput.value.trim();
+
+        if (customItemText !== "") {
+          // Find existing items based on their label text.
+          const existingItems = Array.from(
+            document.querySelectorAll(".dropdown-list label")
+          ).map((label) => label.textContent.trim());
+
+          // Only add the new item if it doesn't already exist.
+          if (!existingItems.includes(customItemText)) {
+            // Create a new label and add a "custom-item" class for later removal.
+            const newLabel = document.createElement("label");
+            newLabel.classList.add("custom-item");
+            newLabel.innerHTML = `<input type="checkbox" checked /> ${customItemText}`;
+
+            // Insert the new label before the custom item container.
+            wishlistForm.insertBefore(
+              newLabel,
+              document.querySelector(".custom-item-container")
+            );
+
+            // Clear the input field.
+            customItemInput.value = "";
+          } else {
+            alert("This item is already on the list!");
+          }
+        }
+      });
+
+      // Optional: Allow moving back down by clicking the button again
+      document.addEventListener("click", function (event) {
+        let container = document.querySelector(".container");
+        let moveButton = document.getElementById("moveButton");
+
+        // If click happens outside the button and container, move it back
+        if (
+          !moveButton.contains(event.target) &&
+          !container.contains(event.target)
+        ) {
+          container.classList.remove("moved");
+        }
+      });
+
+      // Add Custom Wishlist Item
+      document
+        .getElementById("add-custom-item")
+        .addEventListener("click", function () {
+          let customItemInput = document.getElementById("custom-item-input");
+          let customItemText = customItemInput.value.trim();
+
+          if (customItemText !== "") {
+            // Check if item already exists
+            let existingItems = Array.from(
+              document.querySelectorAll(".dropdown-list label")
+            ).map((label) => label.textContent.trim());
+
+            if (!existingItems.includes(customItemText)) {
+              // Create new label with checkbox
+              let newLabel = document.createElement("label");
+              newLabel.innerHTML = `<input type="checkbox" checked /> ${customItemText}`;
+
+              // Append to form
+              document
+                .getElementById("wishlist-form")
+                .insertBefore(
+                  newLabel,
+                  document.querySelector(".custom-item-container")
+                );
+
+              // Clear input
+              customItemInput.value = "";
+            } else {
+              alert("This item is already on the list!");
+            }
+          }
+        });
+
+      // Get references to the checkbox and the container
+      const dropdownToggle = document.getElementById("dropdown-toggle");
+      const moveButtonContainer = document.getElementById("moveButton");
+
+      // Listen for changes on the checkbox
+      dropdownToggle.addEventListener("change", function () {
+        if (this.checked) {
+          // Add the class to move the container up
+          moveButtonContainer.classList.add("moved-up");
+        } else {
+          // Remove the class to bring it back down
+          moveButtonContainer.classList.remove("moved-up");
+        }
+      });
+    </script>
+  </body>
+</html>

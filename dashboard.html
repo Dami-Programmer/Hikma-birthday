@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wishlist Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <h1>🎁 Wishlist Dashboard</h1>
+      <p>See all saved wishlist entries</p>
+
+      <div id="wishlist" class="wishlist-grid"></div>
+
+      <button onclick="clearWishlist()" class="clear-button">
+        Clear Wishlist
+      </button>
+      <a href="Hikma.html" class="back-button">⬅ Back to Wishlist</a>
+    </div>
+
+    <script type="module">
+      // 🔹 Import Firebase modules from CDN
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        orderBy,
+        query,
+        deleteDoc,
+        doc,
+      } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+      // 🔹 Your Firebase config (Replace with actual config)
+      const firebaseConfig = {
+        apiKey: "AIzaSyDCsv_3s00RF4Qc06UiE1WG06wclAEx9F0",
+        authDomain: "birthday-wishlist-46c3c.firebaseapp.com",
+        projectId: "birthday-wishlist-46c3c",
+        storageBucket: "birthday-wishlist-46c3c.firebasestorage.app",
+        messagingSenderId: "595455119080",
+        appId: "1:595455119080:web:cbdf80209ba194ae4a435d",
+        measurementId: "G-HBCSBYS0ZL",
+      };
+
+      // 🔹 Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      // 🔹 Initialize Firestore
+      const db = getFirestore(app);
+
+      // 🔹 Function to fetch and display wishlist data
+      async function loadWishlist() {
+        const wishlistUl = document.getElementById("wishlist");
+        wishlistUl.innerHTML = "<li>Loading...</li>";
+
+        try {
+          // 🔹 Query Firestore for wishlist items, ordered by timestamp (newest first)
+          const q = query(
+            collection(db, "wishlist"),
+            orderBy("createdAt", "desc")
+          );
+          const querySnapshot = await getDocs(q);
+
+          wishlistUl.innerHTML = "";
+
+          // 🔹 Loop through documents and display them
+          querySnapshot.forEach((docSnapshot) => {
+            const data = docSnapshot.data();
+            let div = document.createElement("div");
+            div.className = "wishlist-card";
+
+            // If createdAt is a Firestore timestamp, convert it to a readable format
+            const createdAt =
+              data.createdAt && data.createdAt.toDate
+                ? data.createdAt.toDate().toLocaleString()
+                : data.createdAt;
+
+            div.innerHTML = `
+              <h3>${data.name}</h3>
+              <p><strong>Items:</strong> ${data.items.join(", ")}</p>
+              <p class="date">${createdAt}</p>
+              <button class="delete-button" onclick="deleteEntry('${
+                docSnapshot.id
+              }')">❌ Delete</button>
+            `;
+            wishlistUl.appendChild(div);
+          });
+
+          // If no data is found, notify the user
+          if (querySnapshot.empty) {
+            wishlistUl.innerHTML = "<li>No wishlist items found.</li>";
+          }
+        } catch (error) {
+          console.error("Error fetching wishlist data:", error);
+          wishlistUl.innerHTML = "<li>Error loading wishlist</li>";
+        }
+      }
+
+      // 🔹 Function to delete a wishlist entry
+      async function deleteEntry(documentId) {
+        try {
+          const docRef = doc(db, "wishlist", documentId);
+          await deleteDoc(docRef);
+          console.log(`Deleted document with id: ${documentId}`);
+          // Reload the wishlist after deletion
+          loadWishlist();
+        } catch (error) {
+          console.error("Error deleting the document:", error);
+        }
+      }
+
+      // Expose deleteEntry globally for inline onclick usage
+      window.deleteEntry = deleteEntry;
+
+      // Optional: Function to clear the entire wishlist
+      async function clearWishlist() {
+        try {
+          const q = query(collection(db, "wishlist"));
+          const querySnapshot = await getDocs(q);
+          const deletePromises = [];
+          querySnapshot.forEach((docSnapshot) => {
+            deletePromises.push(deleteDoc(doc(db, "wishlist", docSnapshot.id)));
+          });
+          await Promise.all(deletePromises);
+          console.log("Cleared the entire wishlist.");
+          loadWishlist();
+        } catch (error) {
+          console.error("Error clearing wishlist:", error);
+        }
+      }
+
+      // Expose clearWishlist globally
+      window.clearWishlist = clearWishlist;
+
+      // Load the wishlist on page load
+      loadWishlist();
+    </script>
+  </body>
+</html>
